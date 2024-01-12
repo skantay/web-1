@@ -71,7 +71,27 @@ func (app *application) snippetView(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	fmt.Fprintf(w, "%+v", snippet)
+	files := []string{
+		"./ui/html/base.html",
+		"./ui/html/pages/view.html",
+		"./ui/html/partials/nav.html",
+	}
+
+	templates, err := template.ParseFiles(files...)
+	if err != nil {
+		app.serverError(w, err)
+
+		return
+	}
+
+	data := &templateData{
+		Snippet: snippet,
+	}
+
+	err = templates.ExecuteTemplate(w, "base", data)
+	if err != nil {
+		app.serverError(w, err)
+	}
 }
 
 func (app *application) snippetCreate(w http.ResponseWriter, r *http.Request) {
@@ -82,7 +102,7 @@ func (app *application) snippetCreate(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	title := "0 snail"
+	title := "<script>alert('xss attack')</script>"
 	content := "awjf;sd \n asdfasdkf \n \t"
 	expires := 7
 

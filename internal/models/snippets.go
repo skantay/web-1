@@ -10,8 +10,8 @@ type Snippet struct {
 	ID      int
 	Title   string
 	Content string
-	created time.Time
-	expires time.Time
+	Created time.Time
+	Expires time.Time
 }
 
 type SnippetModel struct {
@@ -19,7 +19,7 @@ type SnippetModel struct {
 }
 
 func (m *SnippetModel) Insert(title string, content string, expires int) (int, error) {
-	stmt := `INSERT INTO snippets (title, content, created, expires)
+	stmt := `INSERT INTO snippets (title, content, Created, expires)
 	VALUES(?, ?, UTC_TIMESTAMP(), DATE_add(UTC_TIMESTAMP(), INTERVAL ? DAY))`
 
 	result, err := m.DB.Exec(stmt, title, content, expires)
@@ -43,7 +43,7 @@ func (m *SnippetModel) Get(id int) (*Snippet, error) {
 
 	s := &Snippet{}
 
-	if err := row.Scan(&s.ID, &s.Title, &s.Content, &s.created, &s.expires); err != nil {
+	if err := row.Scan(&s.ID, &s.Title, &s.Content, &s.Created, &s.Expires); err != nil {
 
 		if errors.Is(err, sql.ErrNoRows) {
 			return nil, ErrNoRecord
@@ -71,12 +71,12 @@ func (m *SnippetModel) Latest() ([]*Snippet, error) {
 	for rows.Next() {
 		s := &Snippet{}
 
-		if err := rows.Scan(&s.ID, &s.Title, &s.Content, &s.created, &s.expires); err != nil {
+		if err := rows.Scan(&s.ID, &s.Title, &s.Content, &s.Created, &s.Expires); err != nil {
 
 			if errors.Is(err, sql.ErrNoRows) {
 				return nil, ErrNoRecord
 			}
-	
+
 			return nil, err
 		}
 
