@@ -93,6 +93,8 @@ func (app *application) snippetCreatePost(w http.ResponseWriter, r *http.Request
 
 	if len(fieldErrors) > 0 {
 		fmt.Fprint(w, fieldErrors)
+
+		return
 	}
 
 	id, err := app.snippets.Insert(title, content, expires)
