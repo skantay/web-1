@@ -5,8 +5,6 @@ import (
 	"fmt"
 	"net/http"
 	"strconv"
-	"strings"
-	"unicode/utf8"
 
 	"github.com/julienschmidt/httprouter"
 	"github.com/skantay/snippetbox/internal/models"
@@ -85,11 +83,11 @@ func (app *application) snippetCreatePost(w http.ResponseWriter, r *http.Request
 	}
 
 	form := snippetCreateForm{
-		Title:       r.PostForm.Get("title"),
-		Content:     r.PostForm.Get("content"),
-		Expires:     expires,
+		Title:   r.PostForm.Get("title"),
+		Content: r.PostForm.Get("content"),
+		Expires: expires,
 	}
-	
+
 	form.CheckField(validator.NotBlank(form.Title), "title", "This field cannot be blank")
 	form.CheckField(validator.MaxChars(form.Title, 100), "title", "This field cannot be more than 100 characters long")
 	form.CheckField(validator.NotBlank(form.Content), "content", "This field cannot be blank")
@@ -99,7 +97,7 @@ func (app *application) snippetCreatePost(w http.ResponseWriter, r *http.Request
 		data := app.newTemplateData(r)
 		data.Form = form
 		app.render(w, http.StatusUnprocessableEntity, "create.html", data)
-		
+
 		return
 	}
 
