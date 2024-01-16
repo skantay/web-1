@@ -215,7 +215,6 @@ func (app *application) userLoginPost(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-
 	app.sessionManager.Put(r.Context(), "authenticatedUserId", id)
 
 	http.Redirect(w, r, "/", http.StatusSeeOther)
