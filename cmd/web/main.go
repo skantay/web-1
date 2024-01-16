@@ -20,8 +20,8 @@ import (
 type application struct {
 	errorLog       *log.Logger
 	infoLog        *log.Logger
-	snippets       *models.SnippetModel
-	users          *models.UserModel
+	snippets       models.ISnippetModel
+	users          models.IUserModel
 	templateCache  map[string]*template.Template
 	formDecoder    *form.Decoder
 	sessionManager *scs.SessionManager
@@ -81,7 +81,7 @@ func main() {
 
 	infoLog.Printf("Starting server on %s", *addr)
 
-	err = srv.ListenAndServe()
+	err = srv.ListenAndServeTLS("./tls/cert.pem", "./tls/key.pem")
 
 	errorLog.Fatal(err)
 }

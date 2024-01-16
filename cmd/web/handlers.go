@@ -134,6 +134,7 @@ func (app *application) userSignupPost(w http.ResponseWriter, r *http.Request) {
 
 	if !form.Valid() {
 		data.Form = form
+		
 		app.render(w, http.StatusUnprocessableEntity, "signup.html", data)
 		return
 	}
@@ -215,7 +216,7 @@ func (app *application) userLoginPost(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	app.sessionManager.Put(r.Context(), "authenticatedUserId", id)
+	app.sessionManager.Put(r.Context(), "authenticatedUserID", id)
 
 	http.Redirect(w, r, "/", http.StatusSeeOther)
 }
@@ -232,4 +233,8 @@ func (app *application) userLogoutPost(w http.ResponseWriter, r *http.Request) {
 	app.sessionManager.Put(r.Context(), "flash", "You've been logged out seccessfully!")
 
 	http.Redirect(w, r, "/", http.StatusSeeOther)
+}
+
+func ping(w http.ResponseWriter, r *http.Request) {
+	w.Write([]byte("OK"))
 }
