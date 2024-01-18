@@ -86,7 +86,6 @@ func (ts *testServer) postForm(t *testing.T, urlPath string, form url.Values) (i
 
 	defer rs.Body.Close()
 	body, err := io.ReadAll(rs.Body)
-	t.Log(string(body))
 	if err != nil {
 		t.Fatal(err)
 	}

@@ -48,6 +48,40 @@ func TestUserSignup(t *testing.T) {
 			csrfToken:    "wrongToken",
 			wantCode:     http.StatusBadRequest,
 		},
+		{
+			name:         "Empty name",
+			userName:     "",
+			userEmail:    validEmail,
+			userPassword: validPassword,
+			csrfToken:    validCSRFToken,
+			wantCode:     http.StatusUnprocessableEntity,
+			wantFormTag:  formTag,
+		},
+		{
+			name:         "Empty email",
+			userName:     validName,
+			userEmail:    "",
+			userPassword: validPassword,
+			csrfToken:    validCSRFToken,
+			wantCode:     http.StatusUnprocessableEntity,
+			wantFormTag:  formTag,
+		},
+		{
+			name:         "Empty password",
+			userName:     validName,
+			userEmail:    validEmail,
+			userPassword: "",
+			csrfToken:    validCSRFToken,
+			wantCode:     http.StatusUnprocessableEntity,
+		},
+		{
+			name:         "Duplicate email",
+			userName:     validName,
+			userEmail:    "123@123.123",
+			userPassword: validPassword,
+			csrfToken:    validCSRFToken,
+			wantCode:     http.StatusUnprocessableEntity,
+		},
 	}
 
 	for _, testCase := range tests {
