@@ -20,7 +20,7 @@ func TestUserSignup(t *testing.T) {
 		validName     = "Bob"
 		validPassword = "validPa$$word"
 		validEmail    = "bob@example.com"
-		formTag       = "<form action='/user/signup' method='POSt' novalidate>"
+		formTag       = "<form action=\"/user/signup\" method=\"POST\" novalidate>"
 	)
 
 	tests := []struct {
@@ -39,6 +39,14 @@ func TestUserSignup(t *testing.T) {
 			userPassword: validPassword,
 			csrfToken:    validCSRFToken,
 			wantCode:     http.StatusSeeOther,
+		},
+		{
+			name:         "Invalid CSRF Token",
+			userName:     validName,
+			userEmail:    validEmail,
+			userPassword: validPassword,
+			csrfToken:    "wrongToken",
+			wantCode:     http.StatusBadRequest,
 		},
 	}
 

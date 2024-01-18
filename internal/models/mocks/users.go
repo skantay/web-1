@@ -7,7 +7,7 @@ import (
 type UserModel struct{}
 
 func (m *UserModel) Insert(name, email, password string) error {
-	if email == "mock@mock.com" {
+	if email == "bob@example.com" {
 		return nil
 	}
 
