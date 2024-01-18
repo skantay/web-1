@@ -2,10 +2,64 @@ package main
 
 import (
 	"net/http"
+	"net/url"
 	"testing"
 
 	"github.com/skantay/snippetbox/internal/assert"
 )
+
+func TestUserSignup(t *testing.T) {
+	app := newTestApplication(t)
+	ts := newTestServer(t, app.routes())
+	defer ts.Close()
+
+	_, _, body := ts.get(t, "/user/signup")
+	validCSRFToken := extractCSRFToken(t, body)
+
+	const (
+		validName     = "Bob"
+		validPassword = "validPa$$word"
+		validEmail    = "bob@example.com"
+		formTag       = "<form action='/user/signup' method='POSt' novalidate>"
+	)
+
+	tests := []struct {
+		name         string
+		userName     string
+		userEmail    string
+		userPassword string
+		csrfToken    string
+		wantCode     int
+		wantFormTag  string
+	}{
+		{
+			name:         "Valid submission",
+			userName:     validName,
+			userEmail:    validEmail,
+			userPassword: validPassword,
+			csrfToken:    validCSRFToken,
+			wantCode:     http.StatusSeeOther,
+		},
+	}
+
+	for _, testCase := range tests {
+		t.Run(testCase.name, func(t *testing.T) {
+			form := url.Values{}
+			form.Add("name", testCase.userName)
+			form.Add("email", testCase.userEmail)
+			form.Add("password", testCase.userPassword)
+			form.Add("csrf_token", testCase.csrfToken)
+
+			code, _, body := ts.postForm(t, "/user/signup", form)
+
+			assert.Equal(t, code, testCase.wantCode)
+
+			if testCase.wantFormTag != "" {
+				assert.StringContains(t, testCase.wantFormTag, body)
+			}
+		})
+	}
+}
 
 func TestSnippetView(t *testing.T) {
 	app := newTestApplication(t)
@@ -57,7 +111,6 @@ func TestSnippetView(t *testing.T) {
 			code, _, body := ts.get(t, testCase.urlPath)
 
 			assert.Equal(t, code, testCase.wantCode)
-
 			if testCase.wantBody != "" {
 				assert.StringContains(t, body, testCase.wantBody)
 			}

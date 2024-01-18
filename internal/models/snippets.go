@@ -7,8 +7,8 @@ import (
 )
 
 type ISnippetModel interface {
-	Insert(title string, content string, expires int) (int, error)
-	Get(id int) (*Snippet, error)
+	Insert(string, string, int) (int, error)
+	Get(int) (*Snippet, error)
 	Latest() ([]*Snippet, error)
 }
 

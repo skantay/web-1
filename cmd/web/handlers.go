@@ -134,7 +134,7 @@ func (app *application) userSignupPost(w http.ResponseWriter, r *http.Request) {
 
 	if !form.Valid() {
 		data.Form = form
-		
+
 		app.render(w, http.StatusUnprocessableEntity, "signup.html", data)
 		return
 	}

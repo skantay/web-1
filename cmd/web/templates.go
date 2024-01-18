@@ -2,6 +2,7 @@ package main
 
 import (
 	"html/template"
+	"os"
 	"path/filepath"
 	"time"
 
@@ -21,7 +22,19 @@ type templateData struct {
 func newTemplateCache() (map[string]*template.Template, error) {
 	cache := map[string]*template.Template{}
 
-	pages, err := filepath.Glob("./ui/html/pages/*.html")
+	cwd, err := os.Getwd()
+	if err != nil {
+		return nil, err
+	}
+
+	for i := len(cwd); i >= 0; i-- {
+		cwd = cwd[:i]
+		if cwd[i-len("web-1"):i] == "web-1" {
+			break
+		}
+	}
+
+	pages, err := filepath.Glob(cwd + "/ui/html/pages/*.html")
 	if err != nil {
 		return nil, err
 	}
@@ -29,12 +42,12 @@ func newTemplateCache() (map[string]*template.Template, error) {
 	for _, page := range pages {
 		name := filepath.Base(page)
 
-		ts, err := template.New(name).Funcs(functions).ParseFiles("./ui/html/base.html")
+		ts, err := template.New(name).Funcs(functions).ParseFiles(cwd + "/ui/html/base.html")
 		if err != nil {
 			return nil, err
 		}
 
-		ts, err = ts.ParseGlob("./ui/html/partials/*.html")
+		ts, err = ts.ParseGlob(cwd + "/ui/html/partials/*.html")
 		if err != nil {
 			return nil, err
 		}

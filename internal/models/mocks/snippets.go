@@ -6,7 +6,6 @@ import (
 	"github.com/skantay/snippetbox/internal/models"
 )
 
-
 var mockSnippet = &models.Snippet{
 	ID:      1,
 	Title:   "MOCK TITLE",
@@ -32,4 +31,3 @@ func (m *SnippetModel) Get(id int) (*models.Snippet, error) {
 func (m *SnippetModel) Latest() ([]*models.Snippet, error) {
 	return []*models.Snippet{mockSnippet}, nil
 }
-
