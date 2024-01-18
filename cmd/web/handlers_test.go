@@ -55,7 +55,7 @@ func TestUserSignup(t *testing.T) {
 			assert.Equal(t, code, testCase.wantCode)
 
 			if testCase.wantFormTag != "" {
-				assert.StringContains(t, testCase.wantFormTag, body)
+				assert.StringContains(t, body, testCase.wantFormTag)
 			}
 		})
 	}

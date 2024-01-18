@@ -79,7 +79,7 @@ func (ts *testServer) get(t *testing.T, urlPath string) (int, http.Header, strin
 }
 
 func (ts *testServer) postForm(t *testing.T, urlPath string, form url.Values) (int, http.Header, string) {
-	rs, err := ts.Client().PostForm(ts.URL + urlPath, form)
+	rs, err := ts.Client().PostForm(ts.URL+urlPath, form)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -94,7 +94,7 @@ func (ts *testServer) postForm(t *testing.T, urlPath string, form url.Values) (i
 	return rs.StatusCode, rs.Header, string(body)
 }
 
-var csrfTokenRX = regexp.MustCompile(`<input type='hidden' name='csrf_token' value='(.+)'>`)
+var csrfTokenRX = regexp.MustCompile(`<input type="hidden" name="csrf_token" value="(.+)">`)
 
 func extractCSRFToken(t *testing.T, body string) string {
 	matches := csrfTokenRX.FindStringSubmatch(body)
