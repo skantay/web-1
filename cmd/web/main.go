@@ -18,6 +18,7 @@ import (
 )
 
 type application struct {
+	debug          bool
 	errorLog       *log.Logger
 	infoLog        *log.Logger
 	snippets       models.ISnippetModel
@@ -30,6 +31,7 @@ type application struct {
 func main() {
 	addr := flag.String("addr", ":4000", "HTTP network address")
 	dsn := flag.String("dsn", "web:pass@/snippetbox?parseTime=true", "MySQL data source name")
+	debugMode := flag.Bool("debug", false, "use -debug to enable debug mode")
 
 	flag.Parse()
 
@@ -56,6 +58,7 @@ func main() {
 	sessionManager.Cookie.Secure = true
 
 	app := &application{
+		debug:          *debugMode,
 		errorLog:       errorLog,
 		infoLog:        infoLog,
 		snippets:       &models.SnippetModel{DB: db},

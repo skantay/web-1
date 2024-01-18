@@ -8,6 +8,60 @@ import (
 	"github.com/skantay/snippetbox/internal/assert"
 )
 
+func TestSnippetCreate(t *testing.T) {
+
+	tests := []struct {
+		name          string
+		wantCode      int
+		wantHeader    string
+		wantBody      string
+		authenticated bool
+	}{
+		{
+			name:          "Unauthenticated",
+			wantCode:      303,
+			wantHeader:    "/user/login",
+			authenticated: false,
+		},
+		{
+			name:          "Authenticated",
+			wantCode:      200,
+			wantBody:      `<form action='/snippet/create' method='POST'>`,
+			authenticated: true,
+		},
+	}
+
+	for _, testCase := range tests {
+		t.Run(testCase.name, func(t *testing.T) {
+			app := newTestApplication(t)
+			ts := newTestServer(t, app.routes())
+			defer ts.Close()
+
+			if testCase.authenticated {
+				_, _, body := ts.get(t, "/user/login")
+				validCSRFToken := extractCSRFToken(t, body)
+
+				form := url.Values{}
+				form.Add("email", "mock@mock.com")
+				form.Add("password", "123")
+				form.Add("csrf_token", validCSRFToken)
+				ts.postForm(t, "/user/login", form)
+
+			}
+
+			code, header, body := ts.get(t, "/snippet/create")
+
+			assert.Equal(t, code, testCase.wantCode)
+
+			if !testCase.authenticated {
+				assert.Equal(t, header.Get("Location"), testCase.wantHeader)
+			} else {
+				assert.StringContains(t, body, testCase.wantBody)
+			}
+		})
+	}
+}
+
 func TestUserSignup(t *testing.T) {
 	app := newTestApplication(t)
 	ts := newTestServer(t, app.routes())

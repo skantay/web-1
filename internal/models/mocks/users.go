@@ -1,10 +1,13 @@
 package mocks
 
 import (
+	"database/sql"
 	"github.com/skantay/snippetbox/internal/models"
 )
 
-type UserModel struct{}
+type UserModel struct {
+	*sql.DB
+}
 
 func (m *UserModel) Insert(name, email, password string) error {
 	if email == "bob@example.com" {
@@ -27,4 +30,12 @@ func (m *UserModel) Exists(id int) (bool, error) {
 	}
 
 	return false, nil
+}
+
+func (m *UserModel) Get(id int) (*models.User, error) {
+	return nil, nil
+}
+
+func (m *UserModel) PasswordUpdate(oldPass, newPass string, id int) error {
+	return nil
 }

@@ -17,6 +17,14 @@ func StringContains(t *testing.T, actual, expectedSubstring string) {
 	t.Helper()
 
 	if !strings.Contains(actual, expectedSubstring) {
-		t.Errorf("error")
+		t.Errorf("not found")
+	}
+}
+
+func NillError(t *testing.T, actual error) {
+	t.Helper()
+
+	if actual != nil {
+		t.Errorf("got: %v; expected: nil", actual)
 	}
 }
