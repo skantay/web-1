@@ -1,6 +1,26 @@
 {{define "nav"}}
 <nav>
-    <a href='/'>Home</a>
-    <a href='/snippet/create'>Create snippet</a>
+    <div>
+        <a href='/'>Home</a>
+
+        {{if .IsAuthenticated}}
+            <a href='/snippet/create'>Create snippet</a>
+        {{end}}
+    </div>
+
+
+    {{if .IsAuthenticated}}
+        <div>
+            <form action="/user/logout" method="POST">
+                <input type="hidden" name="csrf_token" value="{{.CSRFToken}}">
+                <button>Logout</button>
+            </form>
+        </div>
+    {{else}}
+        <div>
+            <a href="/user/signup">Sign Up</a>
+            <a href="/user/login">Login</a>
+        </div>
+    {{end}}
 </nav>
 {{end}}

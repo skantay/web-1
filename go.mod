@@ -13,3 +13,8 @@ require (
 	github.com/alexedwards/scs/mysqlstore v0.0.0-20231113091146-cef4b05350c8
 	github.com/alexedwards/scs/v2 v2.7.0
 )
+
+require (
+	github.com/justinas/nosurf v1.1.1 // indirect
+	golang.org/x/crypto v0.18.0 // indirect
+)
