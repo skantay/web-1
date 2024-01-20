@@ -1,5 +1,25 @@
 # web-1
 
+## Usage
+
+```bash
+go run .cmd/web
+```
+
+The server will be running on :4000. But you can configure it by
+
+```bash
+go run .cmd/web -addr=:4001
+```
+
+## About this project
+
+It is a simple web application with features like...
+
+1. Authentication
+2. Creating posts
+ 
+
 ## Links to read
 
 1. https://deviq.com/principles/separation-of-concerns
